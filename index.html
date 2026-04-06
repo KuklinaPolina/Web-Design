@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>D&D Мастерская — Настольные ролевые игры</title>
+    <style>
+      :root {
+          --dark-blue: #1E2A47;
+          --gold: #D4AF37;
+          --dark-gray: #2C2C2C;
+          --white: #F5F5F5;
+          --light-blue: #3B5589;
+      }
+
+      * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          font-family: 'Segoe UI', Roboto, sans-serif;
+      }
+
+      body {
+          background-color: var(--light-blue);
+          color: var(--dark-gray);
+          line-height: 1.6;
+      }
+
+      /* Header & Nav */
+      header {
+          background-color: var(--dark-blue);
+          color: var(--white);
+          padding: 1rem 5%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          position: sticky;
+          top: 0;
+          z-index: 1000;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      }
+
+      .logo {
+          font-size: 1.5rem;
+          font-weight: bold;
+          color: var(--gold);
+          text-decoration: none;
+      }
+
+      nav ul {
+          list-style: none;
+          display: flex;
+          gap: 20px;
+      }
+
+      nav a {
+          color: var(--white);
+          text-decoration: none;
+          font-weight: 500;
+          cursor: pointer;
+          transition: color 0.3s;
+      }
+
+      nav a:hover, nav a.active {
+          color: var(--gold);
+      }
+
+      /* Common styles */
+      .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 40px 20px;
+      }
+
+      .section {
+          display: none;
+          animation: fadeIn 0.5s ease;
+      }
+
+      .section.active {
+          display: block;
+      }
+
+      @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+      }
+
+      h1, h2, h3 {
+          color: var(--white);
+          margin-bottom: 20px;
+      }
+
+      h2 {
+          border-bottom: 3px solid var(--gold);
+          display: inline-block;
+          padding-bottom: 5px;
+          margin-bottom: 30px;
+      }
+
+      .btn {
+          background-color: var(--gold);
+          color: var(--dark-blue);
+          padding: 12px 24px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          font-weight: bold;
+          text-transform: uppercase;
+          transition: background 0.3s, transform 0.2s;
+          text-decoration: none;
+          display: inline-block;
+      }
+
+      .btn:hover {
+          background-color: #f1c40f;
+          transform: scale(1.05);
+      }
+
+      /* Hero Block */
+      .hero {
+          background: linear-gradient(rgba(30, 42, 71, 0.8), rgba(30, 42, 71, 0.8)), url('https://images.unsplash.com/photo-1614032686153-7663f2220139?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
+          color: white;
+          text-align: center;
+          padding: 100px 20px;
+          margin-bottom: 40px;
+          border-radius: 8px;
+      }
+
+      .hero h1 {
+          color: var(--gold);
+          font-size: 3rem;
+          margin-bottom: 20px;
+      }
+
+      /* Cards Layout */
+      .grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 25px;
+          margin-top: 30px;
+      }
+
+      .card {
+          background: var(--white);
+          padding: 25px;
+          border-radius: 8px;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+          transition: transform 0.3s;
+      }
+
+      .card:hover {
+          transform: translateY(-5px);
+      }
+
+      /* Quiz */
+      #quiz-container {
+          background: var(--dark-gray);
+          color: var(--white);
+          padding: 40px;
+          border-radius: 12px;
+          max-width: 800px;
+          margin: 40px auto;
+      }
+
+      .quiz-question {
+          display: none;
+      }
+
+      .quiz-question.active {
+          display: block;
+      }
+
+      .options {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          margin-top: 20px;
+      }
+
+      .option-btn {
+          background: var(--white);
+          color: var(--dark-blue);
+          padding: 15px;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          text-align: left;
+          transition: background 0.3s;
+      }
+
+      .option-btn:hover {
+          background: var(--gold);
+      }
+
+      #quiz-result {
+          text-align: center;
+          display: none;
+      }
+
+      #quiz-result h3 {
+          color: var(--gold);
+          font-size: 2rem;
+      }
+
+      /* Footer */
+      footer {
+          background-color: var(--dark-blue);
+          color: var(--white);
+          padding: 40px 5%;
+          margin-top: 60px;
+          text-align: center;
+      }
+
+      .footer-content {
+          display: flex;
+          justify-content: space-around;
+          flex-wrap: wrap;
+          gap: 20px;
+          margin-bottom: 20px;
+      }
+
+      input[type="email"], input[type="password"], input[type="text"] {
+          padding: 10px;
+          border-radius: 4px;
+          border: 1px solid #ccc;
+          width: 100%;
+          margin-bottom: 15px;
+      }
+
+      table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 20px 0;
+          background: white;
+      }
+
+      th, td {
+          border: 1px solid #ddd;
+          padding: 12px;
+          text-align: left;
+      }
+
+      th {
+          background: var(--dark-blue);
+          color: var(--gold);
+      }
+
+      .avatar-placeholder {
+          width: 100px;
+          height: 100px;
+          background: #ccc;
+          border-radius: 50%;
+          margin: 0 auto 15px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 2rem;
+          color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="#" class="logo" onclick="showSection('home')">D&D МАСТЕРСКАЯ</a>
+      <nav>
+        <ul>
+          <li>
+            <a onclick="showSection('home')" id="nav-home" class="active"
+              >Главная</a
+            >
+          </li>
+          <li><a onclick="showSection('about')" id="nav-about">Об игре</a></li>
+          <li>
+            <a onclick="showSection('masters')" id="nav-masters">Мастера</a>
+          </li>
+          <li><a onclick="showSection('dice')" id="nav-dice">Кубики</a></li>
+          <li>
+            <a onclick="showSection('profile')" id="nav-profile">Профиль</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="container">
+      <!-- HOME PAGE -->
+      <section id="home" class="section active">
+        <div class="hero">
+          <h1>Открой мир приключений с D&D Мастерской</h1>
+          <p>
+            Профессиональные мастера, увлекательные кампании и полное
+            погружение.
+          </p>
+          <br />
+          <button class="btn" onclick="showSection('masters')">
+            Заказать сессию
+          </button>
+        </div>
+
+        <div class="card">
+          <h3>Что такое D&D?</h3>
+          <p>
+            Dungeons & Dragons — это настольная ролевая игра в жанре фэнтези,
+            где вы становитесь героем собственной истории. Вместе с друзьями вы
+            сражаетесь с монстрами, разгадываете тайны и формируете мир вокруг
+            себя. Ваши решения и броски кубиков меняют ход истории.
+          </p>
+          <br />
+          <a
+            href="#"
+            onclick="showSection('about')"
+            style="color: var(--light-blue); font-weight: bold;"
+            >Узнать подробнее →</a
+          >
+        </div>
+
+        <div id="quiz-wrap" style="margin-top: 40px;">
+          <h2 style="display: block; text-align: center;">
+            Тест: какая вы роль?
+          </h2>
+          <div id="quiz-container">
+            <div id="quiz-intro" style="text-align: center;">
+              <p>
+                Пройдите короткий тест из 5 вопросов и узнайте, какой класс в
+                D&D подходит вам больше всего!
+              </p>
+              <br />
+              <button class="btn" onclick="startQuiz()">Пройти тест</button>
+            </div>
+
+            <div id="questions-area"></div>
+
+            <div id="quiz-result">
+              <h3 id="result-title">Вы — Маг!</h3>
+              <p id="result-desc">
+                Краткое описание класса и его типичные действия в игре.
+              </p>
+              <div
+                style="margin-top: 30px; border-top: 1px solid #444; padding-top: 20px;"
+              >
+                <p>Оставьте свой email, чтобы получить результат и подарок:</p>
+                <input
+                  type="email"
+                  id="result-email"
+                  placeholder="your@email.com"
+                  required
+                />
+                <button class="btn" onclick="saveResult()">
+                  Получить подтверждение
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 60px;">
+          <h2>Наши мастера</h2>
+          <div class="grid" id="masters-preview"></div>
+          <div style="text-align: center; margin-top: 30px;">
+            <button class="btn" onclick="showSection('masters')">
+              Все мастера
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT PAGE -->
+      <section id="about" class="section">
+        <h2>Об игре D&D</h2>
+        <div class="card" style="margin-bottom: 20px;">
+          <h3>История D&D</h3>
+          <p>
+            Dungeons & Dragons была создана Гэри Гайгэксом и Дэйвом Арнесоном в
+            1974 году. Она стала родоначальницей всей индустрии ролевых игр,
+            вдохновив тысячи книг, фильмов и видеоигр.
+          </p>
+        </div>
+
+        <h3>Популярные классы</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Класс</th>
+              <th>Описание</th>
+              <th>Основная роль</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Воин</td>
+              <td>Мастер оружия и брони.</td>
+              <td>Защита и ближний бой</td>
+            </tr>
+            <tr>
+              <td>Маг</td>
+              <td>Заклинатель, использующий тайные искусства.</td>
+              <td>Урон по площади и контроль</td>
+            </tr>
+            <tr>
+              <td>Плут</td>
+              <td>Эксперт по скрытности и взлому.</td>
+              <td>Разведка и точные удары</td>
+            </tr>
+            <tr>
+              <td>Жрец</td>
+              <td>Служитель богов, обладающий сакральной магией.</td>
+              <td>Лечение и поддержка</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div
+          class="card"
+          style="margin-top: 30px; background: var(--dark-blue); color: white;"
+        >
+          <h3>Как начать играть</h3>
+          <ol style="margin: 20px 0 20px 40px;">
+            <li>Создайте своего первого персонажа (или выберите готового).</li>
+            <li>
+              Ознакомьтесь с базовыми правилами (D20 — ваш главный инструмент).
+            </li>
+            <li>Найдите Мастера и группу игроков.</li>
+            <li>Начните свое приключение!</li>
+          </ol>
+          <button class="btn" onclick="showSection('masters')">
+            Найти мастера
+          </button>
+        </div>
+      </section>
+
+      <!-- MASTERS PAGE -->
+      <section id="masters" class="section">
+        <h2>Наши Мастера</h2>
+        <p>
+          Наши профессиональные гейм-мастера помогут вам погрузиться в атмосферу
+          игры, независимо от вашего опыта.
+        </p>
+        <div class="grid" id="masters-full"></div>
+      </section>
+
+      <!-- DICE PAGE -->
+      <section id="dice" class="section">
+        <h2>Аренда кубиков и инвентаря</h2>
+        <div class="grid">
+          <div class="card">
+            <div
+              style="height: 150px; background: #ddd; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; border-radius: 4px;"
+            >
+              🎲
+            </div>
+            <h3>Классический сет (d4-d20)</h3>
+            <p>
+              Базовый набор из 7 многогранных кубиков, необходимых для каждой
+              игры.
+            </p>
+            <p><strong>Аренда: 200 ₽ / сессия</strong></p>
+          </div>
+          <div class="card">
+            <div
+              style="height: 150px; background: #ddd; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; border-radius: 4px;"
+            >
+              🛡️
+            </div>
+            <h3>Ширма Мастера</h3>
+            <p>Справочные таблицы и приватность для ваших бросков и заметок.</p>
+            <p><strong>Аренда: 300 ₽ / сессия</strong></p>
+          </div>
+          <div class="card">
+            <div
+              style="height: 150px; background: #ddd; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; border-radius: 4px;"
+            >
+              🧙‍♂️
+            </div>
+            <h3>Миниатюры героев</h3>
+            <p>
+              Большой выбор фигурок для визуализации сражений на тактической
+              карте.
+            </p>
+            <p><strong>Аренда: 50 ₽ / шт</strong></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROFILE PAGE -->
+      <section id="profile" class="section">
+        <div id="auth-block">
+          <h2>Вход в личный кабинет</h2>
+          <div class="card" style="max-width: 400px; margin: 0 auto;">
+            <label>Email</label>
+            <input
+              type="email"
+              id="login-email"
+              placeholder="example@mail.com"
+            />
+            <label>Пароль</label>
+            <input type="password" id="login-pass" placeholder="••••••••" />
+            <button class="btn" style="width: 100%;" onclick="mockLogin()">
+              Войти
+            </button>
+            <p style="margin-top: 15px; text-align: center; font-size: 0.9rem;">
+              Нет аккаунта? <a href="#">Зарегистрироваться</a>
+            </p>
+          </div>
+        </div>
+
+        <div id="cabinet-block" style="display: none;">
+          <h2>Личный кабинет</h2>
+          <div class="card">
+            <div style="display: flex; gap: 20px; align-items: center;">
+              <div class="avatar-placeholder">👤</div>
+              <div>
+                <h3 id="user-name">Игрок №1</h3>
+                <p id="user-email-display">mail@example.com</p>
+              </div>
+            </div>
+
+            <div style="margin-top: 40px;">
+              <h3>Ваши результаты тестов</h3>
+              <div id="saved-results" style="margin-top: 15px;">
+                <p>Вы пока не проходили тесты.</p>
+              </div>
+              <button
+                class="btn"
+                style="margin-top: 20px;"
+                onclick="showSection('home')"
+              >
+                Пройти новый тест
+              </button>
+            </div>
+          </div>
+          <button
+            class="btn"
+            style="margin-top: 40px; background: #ccc;"
+            onclick="logout()"
+          >
+            Выйти
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-content">
+        <div>
+          <h4>D&D Мастерская</h4>
+          <p>© 2024 Все права защищены</p>
+        </div>
+        <div>
+          <h4>Контакты</h4>
+          <p>Email: info@dndworkshop.ru</p>
+          <p>Тел: +7 (999) 000-00-00</p>
+        </div>
+        <div>
+          <h4>Соцсети</h4>
+          <p>ВКонтакте | Telegram | Discord</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const masters = [
+          { id: 1, name: 'Алексей "Дракон"', exp: '5 лет', spec: 'Эпические кампании, нуар' },
+          { id: 2, name: 'Марина Тень', exp: '3 года', spec: 'Интриги, детективные сюжеты' },
+          { id: 3, name: 'Сергей Молот', exp: '7 лет', spec: 'Боевые столкновения, героика' },
+          { id: 4, name: 'Анна Вижн', exp: '4 года', spec: 'Тайны миров, онлайн Roll20' }
+      ];
+
+      const quizQuestions = [
+          {
+              q: "Вас окружила стая гоблинов в темном переулке. Ваши действия?",
+              options: [
+                  { text: "Выхватываю меч и щит — стою до последнего!", score: 'Warrior' },
+                  { text: "Шепчу заклинание огненного шара", score: 'Mage' },
+                  { text: "Использую дымовую шашку и исчезаю в тенях", score: 'Rogue' },
+                  { text: "Обращаюсь к свету богов за защитой", score: 'Cleric' }
+              ]
+          },
+          {
+              q: "Какое сокровище вы бы выбрали?",
+              options: [
+                  { text: "Неразрушимый доспех", score: 'Warrior' },
+                  { text: "Посох древних знаний", score: 'Mage' },
+                  { text: "Набор магических отмычек", score: 'Rogue' },
+                  { text: "Священный амулет исцеления", score: 'Cleric' }
+              ]
+          },
+          {
+              q: "Как вы относитесь к правилам и законам?",
+              options: [
+                  { text: "Кодекс чести — превыше всего", score: 'Warrior' },
+                  { text: "Законы физики важнее людских", score: 'Mage' },
+                  { text: "Правила созданы, чтобы их обходить", score: 'Rogue' },
+                  { text: "Служу закону своего божества", score: 'Cleric' }
+              ]
+          },
+          {
+              q: "Ваш идеальный вечер — это...",
+              options: [
+                  { text: "Тренировка на мечах", score: 'Warrior' },
+                  { text: "Изучение пыльных манускриптов", score: 'Mage' },
+                  { text: "Игра в кости в таверне", score: 'Rogue' },
+                  { text: "Помощь нуждающимся в храме", score: 'Cleric' }
+              ]
+          },
+          {
+              q: "Что вы скажете поверженному врагу?",
+              options: [
+                  { text: "Сдавайся с честью!", score: 'Warrior' },
+                  { text: "Знание — сила, а ты был слаб", score: 'Mage' },
+                  { text: "Ничего личного, просто бизнес", score: 'Rogue' },
+                  { text: "Пусть боги простят тебя", score: 'Cleric' }
+              ]
+          }
+      ];
+
+      const classesInfo = {
+          Warrior: { title: "Воин", desc: "Вы сталь и щит группы. Ваша сила в дисциплине и мастерстве владения оружием. Вы всегда на передовой, прикрывая союзников." },
+          Mage: { title: "Маг", desc: "Ваш разум — ваше оружие. Вы подчиняете себе стихии и ткань самой реальности, уничтожая врагов мощными заклинанями." },
+          Rogue: { title: "Плут", desc: "Тень — ваш дом. Вы виртуоз скрытности, точных ударов в спину и решения проблем самым неожиданным способом." },
+          Cleric: { title: "Жрец", desc: "Вы проводник божественной воли. Ваша вера дает жизнь союзникам и повергает в прах нежить и тьму." }
+      };
+
+      let currentQuestion = 0;
+      let quizScores = { Warrior: 0, Mage: 0, Rogue: 0, Cleric: 0 };
+      let isAuthorized = false;
+      let currentUserEmail = '';
+
+      function showSection(id) {
+          document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+          document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+          document.getElementById(id).classList.add('active');
+          document.getElementById('nav-' + id).classList.add('active');
+          window.scrollTo(0, 0);
+      }
+
+      function renderMasters() {
+          const fullContainer = document.getElementById('masters-full');
+          const previewContainer = document.getElementById('masters-preview');
+
+          const mastersHtml = masters.map(m => `
+              <div class="card">
+                  <div class="avatar-placeholder">👤</div>
+                  <h3>${m.name}</h3>
+                  <p><strong>Опыт:</strong> ${m.exp}</p>
+                  <p><strong>Специализация:</strong> ${m.spec}</p>
+              </div>
+          `).join('');
+
+          fullContainer.innerHTML = mastersHtml;
+          previewContainer.innerHTML = masters.slice(0, 3).map(m => `
+              <div class="card">
+                  <div class="avatar-placeholder">👤</div>
+                  <h3>${m.name}</h3>
+                  <p>${m.spec}</p>
+              </div>
+          `).join('');
+      }
+
+      function startQuiz() {
+          document.getElementById('quiz-intro').style.display = 'none';
+          currentQuestion = 0;
+          quizScores = { Warrior: 0, Mage: 0, Rogue: 0, Cleric: 0 };
+          renderQuestion();
+      }
+
+      function renderQuestion() {
+          const area = document.getElementById('questions-area');
+          const q = quizQuestions[currentQuestion];
+
+          area.innerHTML = `
+              <div class="quiz-question active">
+                  <p>Вопрос ${currentQuestion + 1} из 5</p>
+                  <h3>${q.q}</h3>
+                  <div class="options">
+                      ${q.options.map(o => `<button class="option-btn" onclick="handleAnswer('${o.score}')">${o.text}</button>`).join('')}
+                  </div>
+              </div>
+          `;
+      }
+
+      function handleAnswer(scoreKey) {
+          quizScores[scoreKey]++;
+          currentQuestion++;
+          if (currentQuestion < quizQuestions.length) {
+              renderQuestion();
+          } else {
+              showResults();
+          }
+      }
+
+      function showResults() {
+          document.getElementById('questions-area').innerHTML = '';
+          const topClass = Object.keys(quizScores).reduce((a, b) => quizScores[a] > quizScores[b] ? a : b);
+          const info = classesInfo[topClass];
+
+          document.getElementById('result-title').innerText = `Вы — ${info.title}!`;
+          document.getElementById('result-desc').innerText = info.desc;
+          document.getElementById('quiz-result').style.display = 'block';
+
+          window.lastTestResult = info.title;
+      }
+
+      function saveResult() {
+          const email = document.getElementById('result-email').value;
+          if (!email) return alert("Пожалуйста, введите email");
+
+          const resText = window.lastTestResult;
+          alert("Результат '" + resText + "' отправлен на почту " + email + "!");
+
+          // Mock save to profile
+          const resultItem = `<p><strong>${new Date().toLocaleDateString()}</strong>: Результат теста — <b>${resText}</b></p>`;
+          const savedDiv = document.getElementById('saved-results');
+          if (savedDiv.innerText.includes("не проходили")) savedDiv.innerHTML = '';
+          savedDiv.innerHTML += resultItem;
+      }
+
+      function mockLogin() {
+          const email = document.getElementById('login-email').value;
+          if (!email) return alert("Введите email");
+
+          isAuthorized = true;
+          currentUserEmail = email;
+          document.getElementById('auth-block').style.display = 'none';
+          document.getElementById('cabinet-block').style.display = 'block';
+          document.getElementById('user-name').innerText = email.split('@')[0];
+          document.getElementById('user-email-display').innerText = email;
+      }
+
+      function logout() {
+          isAuthorized = false;
+          document.getElementById('auth-block').style.display = 'block';
+          document.getElementById('cabinet-block').style.display = 'none';
+      }
+
+      // Start
+      renderMasters();
+    </script>
+  </body>
+</html>
